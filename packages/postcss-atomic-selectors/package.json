@@ -1,6 +1,6 @@
 {
   "name": "postcss-atomic-selectors",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "type": "module",
   "author": "Stephan Dum",
@@ -11,6 +11,11 @@
     "v8",
     "coverage"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephan-dum/postcss-atomic-selectors.git",
+    "directory": "packages/postcss-atomic-selectors"
+  },
   "files": [
     "dist"
   ],

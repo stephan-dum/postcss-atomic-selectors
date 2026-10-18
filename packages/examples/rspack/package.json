@@ -16,7 +16,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "postcss": "8.5.30",
-    "postcss-atomic-selectors": "1.0.0",
+    "postcss-atomic-selectors": "1.0.1",
     "postcss-loader": "8.2.1",
     "postcss-nesting": "14.0.3",
     "@types/node": "24.19.2",

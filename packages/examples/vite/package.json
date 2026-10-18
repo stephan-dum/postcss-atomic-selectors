@@ -11,7 +11,7 @@
     "@playwright/test": "1.64.0",
     "@dev/playwright": "1.0.0",
     "monocart-coverage-reports": "2.13.2",
-    "postcss-atomic-selectors": "1.0.0",
+    "postcss-atomic-selectors": "1.0.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "postcss": "8.5.30",
