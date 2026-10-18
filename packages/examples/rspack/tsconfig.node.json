@@ -1,0 +1,4 @@
+{
+  "extends": ["@dev/tsconfig/node.json"],
+  "include": ["rspack.config.ts", "playwright.config.ts"]
+}

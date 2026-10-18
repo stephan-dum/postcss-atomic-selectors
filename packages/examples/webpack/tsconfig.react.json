@@ -1,0 +1,6 @@
+{
+  "extends": ["@dev/tsconfig/react.json"],
+  "compilerOptions": {
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+  }
+}

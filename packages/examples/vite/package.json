@@ -1,0 +1,35 @@
+{
+  "name": "@examples/rspack",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@dev/eslint": "1.0.0",
+    "@dev/tsconfig": "1.0.0",
+    "typescript": "6.0.3",
+    "playwright": "1.64.0",
+    "@playwright/test": "1.64.0",
+    "@dev/playwright": "1.0.0",
+    "monocart-coverage-reports": "2.13.2",
+    "postcss-atomic-selectors": "1.0.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "postcss": "8.5.30",
+    "postcss-loader": "8.2.1",
+    "postcss-nesting": "14.0.3",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "vite": "8.3.4",
+    "@vitejs/plugin-react": "6.1.2",
+    "typescript-plugin-css-modules": "5.2.0",
+    "cross-env": "10.1.0"
+  },
+  "scripts": {
+    "dev": "vite dev",
+    "dev:coverage": "cross-env IS_COVERAGE_BUILD=true pnpm run dev",
+    "build": "vite build",
+    "start": "vite dev:coverage",
+    "test:e2e": "playwright test"
+  }
+}

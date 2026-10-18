@@ -1,0 +1,42 @@
+{
+  "name": "@examples/webpack",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "webpack dev",
+    "build": "webpack build --mode=production",
+    "build:coverage": "cross-env IS_COVERAGE_BUILD=true pnpm run build",
+    "start": "serve dist -s -p 3000",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "6.0.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "postcss": "8.5.30",
+    "postcss-atomic-selectors": "1.0.0",
+    "postcss-loader": "8.2.1",
+    "postcss-nesting": "14.0.3",
+    "webpack": "5.112.0",
+    "webpack-cli": "7.2.3",
+    "webpack-dev-server": "6.0.0",
+    "html-webpack-plugin": "5.6.8",
+    "@dev/eslint": "1.0.0",
+    "@swc/register": "0.1.10",
+    "swc-loader": "0.2.7",
+    "@swc/core": "1.16.18",
+    "@dev/tsconfig": "1.0.0",
+    "playwright": "1.64.0",
+    "@playwright/test": "1.64.0",
+    "@dev/playwright": "1.0.0",
+    "monocart-coverage-reports": "2.13.2",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.6.3",
+    "css-minimizer-webpack-plugin": "8.0.0",
+    "terser-webpack-plugin": "^5.6.1",
+    "@types/node": "24.19.2",
+    "serve": "^14.2.6",
+    "cross-env": "^10.1.0"
+  }
+}

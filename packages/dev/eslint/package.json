@@ -1,0 +1,24 @@
+{
+  "name": "@dev/eslint",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "eslint": "^10.12.0",
+    "typescript-eslint": "8.71.1",
+    "@eslint/js": "10.0.1"
+  },
+  "peerDependencies": {
+    "eslint": "10",
+    "typescript": "6"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  }
+}

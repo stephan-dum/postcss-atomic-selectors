@@ -1,0 +1,24 @@
+{
+  "name": "@dev/playwright",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "devDependencies": {
+    "playwright": "1.64.0",
+    "@playwright/test": "1.64.0",
+    "@dev/eslint": "1.0.0",
+    "@dev/tsconfig": "1.0.0",
+    "@types/node": "24.19.2"
+  },
+  "dependencies": {
+    "monocart-coverage-reports": "2.13.2"
+  },
+  "peerDependencies": {
+    "playwright": "1",
+    "@playwright/test": "1"
+  },
+  "exports": {
+    "./config": "./config.ts",
+    "./test": "./test.ts"
+  }
+}

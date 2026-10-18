@@ -1,0 +1,201 @@
+diff --git a/lib/converter/collect-source-maps.js b/lib/converter/collect-source-maps.js
+index b0595deef26c22bc6af149a56458eef4bd2a2682..aa112671c6f66a29d6f7d7cfedb477c94db16373 100644
+--- a/lib/converter/collect-source-maps.js
++++ b/lib/converter/collect-source-maps.js
+@@ -233,7 +233,7 @@ const collectSourceMaps = async (v8list, options) => {
+     for (const item of v8list) {
+ 
+         const {
+-            type, url, id, source, sourceMap
++            url, id, source, sourceMap
+         } = item;
+ 
+         // source and sourceMap will be saved as separated file (could be cached)
+@@ -258,7 +258,7 @@ const collectSourceMaps = async (v8list, options) => {
+ 
+         // An explicitly supplied, usable map takes precedence over sourceMappingURL.
+         // Keep the original source so V8 offsets remain valid.
+-        if (type === 'js' && !isUsableSourceMap(sourceData.sourceMap)) {
++        if (!isUsableSourceMap(sourceData.sourceMap)) {
+             delete sourceData.sourceMap;
+             const candidates = getSourceMapCandidates(source);
+             if (candidates.length) {
+diff --git a/lib/converter/converter.js b/lib/converter/converter.js
+index 64bbe5cb7fa4e37859bd6a5bb2ed802a55458c4b..bc055561e90b80868a31f997d8291b5a9833917c 100644
+--- a/lib/converter/converter.js
++++ b/lib/converter/converter.js
+@@ -8,7 +8,7 @@ const EC = require('eight-colors');
+ 
+ const { Locator } = require('monocart-locator');
+ const Util = require('../utils/util.js');
+-
++const { originalPositionFor, TraceMap } = require('@jridgewell/trace-mapping');
+ const findOriginalRange = require('./find-original-range.js');
+ const { getJsAstInfo, getCssAstInfo } = require('./ast.js');
+ const { getIgnoredRanges } = require('./ignore.js');
+@@ -819,12 +819,52 @@ const handleOriginalEmptyBytesCoverage = (state, originalStateMap) => {
+ };
+ 
+ 
+-const handleAllOriginalBytesCoverage = (state, originalStateMap) => {
++const handleAllOriginalBytesCoverage = (state, originalStateMap, originalStateBySourcePath) => {
+ 
+     const { js, coverageList } = state;
+ 
+     // only for js, no sourcemap for css for now
+     if (!js) {
++      const tracer = new TraceMap(state.sourceMap);
++
++      const couldMapAllRanges = state.coverageList.every((range) => {
++        const originalStart = originalPositionFor(tracer, state.locator.offsetToLocation(range.start));
++        const originalEnd = originalPositionFor(tracer, state.locator.offsetToLocation(range.end));
++
++        const notNull = [
++          originalStart.source,
++          originalStart.line,
++          originalStart.column,
++          originalEnd.source,
++          originalEnd.line,
++          originalEnd.column,
++        ]
++
++        if (notNull.every((property) => property !== null) && originalStart.source === originalEnd.source) {
++          const originalState = originalStateBySourcePath.get(originalStart.source);
++
++          if (originalState) {
++            const startOffset = originalState.locator.locationToOffset(originalStart);
++            const endOffset = originalState.locator.locationToOffset(originalEnd);
++            const originalRange = {start: startOffset, end: endOffset, count: range.count };
++
++            originalState.bytes.push(originalRange);
++
++            return true;
++          }
++        }
++
++        return false;
++      });
++
++      // make sure every range mapped correctly
++      // otherwise discard changes and fallback to all covered
++      if (!couldMapAllRanges) {
++        Util.logDebug(`Could not map all ranges, fallback to all covered for ${EC.yellow(state.sourcePath)}`);
++        state.originalList.forEach((original) => {
++          original.bytes = [];
++        })
++      }
+         return;
+     }
+ 
+@@ -1034,7 +1074,7 @@ const getOriginalDecodedMappings = (originalDecodedMap, sourceIndex, locator) =>
+ 
+ // ========================================================================================================
+ 
+-const initOriginalList = (state, originalDecodedMap, options) => {
++const initOriginalList = (state, originalDecodedMap, originalStateBySourcePath, options) => {
+ 
+     // source filter
+     const sourceFilter = Util.getSourceFilter(options);
+@@ -1096,7 +1136,7 @@ const initOriginalList = (state, originalDecodedMap, options) => {
+             // coverage data
+             v8Data: {}
+         };
+-
++        originalStateBySourcePath.set(sourcePath, originalState);
+         originalStateMap.set(sourceIndex, originalState);
+         lengthAfter += 1;
+     });
+@@ -1226,7 +1266,8 @@ const unpackSourceMap = (state, options) => {
+     state.decodedMappings = decodeSourceMappings(state, originalDecodedMap);
+ 
+     // filter original list and init list
+-    const originalStateMap = initOriginalList(state, originalDecodedMap, options);
++    const originalStateBySourcePath = new Map();
++    const originalStateMap = initOriginalList(state, originalDecodedMap, originalStateBySourcePath, options);
+ 
+     originalDecodedMap.clear();
+ 
+@@ -1251,7 +1292,7 @@ const unpackSourceMap = (state, options) => {
+     });
+ 
+     // handle bytes ranges
+-    handleAllOriginalBytesCoverage(state, originalStateMap);
++    handleAllOriginalBytesCoverage(state, originalStateMap, originalStateBySourcePath);
+ 
+     originalStateMap.forEach((originalState) => {
+         handleOriginalBytesCoverage(originalState);
+diff --git a/lib/generate.js b/lib/generate.js
+index c8dc2eeb89aeef0f468d9a7127689017a3043d6b..bb5fa4438f008bffe64cf9c52efb2d4c3831305b 100644
+--- a/lib/generate.js
++++ b/lib/generate.js
+@@ -30,7 +30,7 @@ const { markdownSummaryReport } = require('./reports/markdown-summary.js');
+ const { rawReport } = require('./reports/raw.js');
+ 
+ const { customReport } = require('./reports/custom.js');
+-
++const { minimatch } = require('minimatch');
+ const allBuiltInReports = {
+     // v8
+     'v8': 'v8',
+@@ -156,6 +156,33 @@ const generateV8ListReports = async (v8list, coverageData, fileSources, options)
+     return v8CoverageResults;
+ };
+ 
++const getFilterFunction = (options) => {
++  switch(typeof options.outputFilter) {
++    case 'function':
++      return options.outputFilter;
++    case 'string':
++      return (entry) => minimatch(entry.sourcePath, options.outputFilter);
++    case 'object':
++      const includes = [];
++      const excludes = [];
++
++      for(const [key, value] of Object.entries(options.outputFilter)) {
++        if(value) {
++          includes.push(key);
++        } else {
++          excludes.push(key);
++        }
++      }
++
++      return (entry) => (
++        includes.some((include) => minimatch(entry.sourcePath, include)) &&
++        !excludes.some((exclude) => minimatch(entry.sourcePath, exclude))
++      );
++    default:
++      throw new TypeError('Invalid options.outputFilter type!');
++  }
++}
++
+ const getCoverageResults = async (dataList, sourceCache, options) => {
+     // get first and check v8list or istanbul data
+     const firstData = dataList[0];
+@@ -181,7 +208,12 @@ const getCoverageResults = async (dataList, sourceCache, options) => {
+         const {
+             v8DataList, coverageData, fileSources
+         } = results;
+-        return generateV8ListReports(v8DataList, coverageData, fileSources, options);
++
++      const filteredV8DataList = options.outputFilter
++        ? v8DataList.filter(getFilterFunction(options))
++        : v8DataList;
++
++        return generateV8ListReports(filteredV8DataList, coverageData, fileSources, options);
+     }
+ 
+     // istanbul data
+diff --git a/package.json b/package.json
+index 424d052bf80c97c16b46adc20ce4f6621dca9f59..41abd595db4e101c093de6bc87b1a2e148d3c86d 100644
+--- a/package.json
++++ b/package.json
+@@ -85,7 +85,8 @@
+         "istanbul-lib-report": "^3.0.1",
+         "istanbul-reports": "^3.2.0",
+         "lz-utils": "^2.1.1",
+-        "monocart-locator": "^1.0.6"
++        "monocart-locator": "^1.0.6",
++        "@jridgewell/trace-mapping": "^0.3.31"
+     },
+     "devDependencies": {
+         "@actions/core": "^3.0.1",

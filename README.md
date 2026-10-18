@@ -1,2 +1,10 @@
-# v8-css-coverage
-A way to collect coverage for all css rules mitigating v8 and source map issues
+# postcss-atomic-selectors
+
+Plugin Documentation: [postcss-atomic-selectors](./packages/postcss-atomic-selectors/readme.md)
+
+Usage Examples:
+
+- [rollup Example](./packages/examples/rollup/readme.md)
+- [pspack Example](./packages/examples/rspack/readme.md)
+- [Vite Example](./packages/examples/vite/readme.md)
+- [webpack Example](./packages/examples/webpack/readme.md)
