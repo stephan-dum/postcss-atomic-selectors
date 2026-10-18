@@ -1,6 +1,6 @@
 # postcss-atomic-selectors
 
-To fix V8's block blindness, this package provides a PostCSS plugin to explode nested structures into atomized, discrete CSS structures during the test build.
+To fix V8's block blindness, this package provides a PostCSS plugin to explode nested structures into atomized, discrete CSS structures.
 
 ## 💡 Motivation – V8 Block-Granularity Problem
 
