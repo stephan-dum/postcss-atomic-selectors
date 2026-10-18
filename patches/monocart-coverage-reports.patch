@@ -21,7 +21,7 @@ index b0595deef26c22bc6af149a56458eef4bd2a2682..aa112671c6f66a29d6f7d7cfedb477c9
              const candidates = getSourceMapCandidates(source);
              if (candidates.length) {
 diff --git a/lib/converter/converter.js b/lib/converter/converter.js
-index 64bbe5cb7fa4e37859bd6a5bb2ed802a55458c4b..bc055561e90b80868a31f997d8291b5a9833917c 100644
+index 64bbe5cb7fa4e37859bd6a5bb2ed802a55458c4b..55e84ecbff38c9a2725b07371ad8e32de4621578 100644
 --- a/lib/converter/converter.js
 +++ b/lib/converter/converter.js
 @@ -8,7 +8,7 @@ const EC = require('eight-colors');
@@ -33,7 +33,7 @@ index 64bbe5cb7fa4e37859bd6a5bb2ed802a55458c4b..bc055561e90b80868a31f997d8291b5a
  const findOriginalRange = require('./find-original-range.js');
  const { getJsAstInfo, getCssAstInfo } = require('./ast.js');
  const { getIgnoredRanges } = require('./ignore.js');
-@@ -819,12 +819,52 @@ const handleOriginalEmptyBytesCoverage = (state, originalStateMap) => {
+@@ -819,12 +819,53 @@ const handleOriginalEmptyBytesCoverage = (state, originalStateMap) => {
  };
  
  
@@ -75,19 +75,20 @@ index 64bbe5cb7fa4e37859bd6a5bb2ed802a55458c4b..bc055561e90b80868a31f997d8291b5a
 +
 +        return false;
 +      });
-+
 +      // make sure every range mapped correctly
 +      // otherwise discard changes and fallback to all covered
 +      if (!couldMapAllRanges) {
++        state.debug = false;
 +        Util.logDebug(`Could not map all ranges, fallback to all covered for ${EC.yellow(state.sourcePath)}`);
 +        state.originalList.forEach((original) => {
 +          original.bytes = [];
++          original.debug = true;
 +        })
 +      }
          return;
      }
  
-@@ -1034,7 +1074,7 @@ const getOriginalDecodedMappings = (originalDecodedMap, sourceIndex, locator) =>
+@@ -1034,7 +1075,7 @@ const getOriginalDecodedMappings = (originalDecodedMap, sourceIndex, locator) =>
  
  // ========================================================================================================
  
@@ -96,7 +97,7 @@ index 64bbe5cb7fa4e37859bd6a5bb2ed802a55458c4b..bc055561e90b80868a31f997d8291b5a
  
      // source filter
      const sourceFilter = Util.getSourceFilter(options);
-@@ -1096,7 +1136,7 @@ const initOriginalList = (state, originalDecodedMap, options) => {
+@@ -1096,7 +1137,7 @@ const initOriginalList = (state, originalDecodedMap, options) => {
              // coverage data
              v8Data: {}
          };
@@ -105,7 +106,7 @@ index 64bbe5cb7fa4e37859bd6a5bb2ed802a55458c4b..bc055561e90b80868a31f997d8291b5a
          originalStateMap.set(sourceIndex, originalState);
          lengthAfter += 1;
      });
-@@ -1226,7 +1266,8 @@ const unpackSourceMap = (state, options) => {
+@@ -1226,7 +1267,8 @@ const unpackSourceMap = (state, options) => {
      state.decodedMappings = decodeSourceMappings(state, originalDecodedMap);
  
      // filter original list and init list
@@ -115,7 +116,7 @@ index 64bbe5cb7fa4e37859bd6a5bb2ed802a55458c4b..bc055561e90b80868a31f997d8291b5a
  
      originalDecodedMap.clear();
  
-@@ -1251,7 +1292,7 @@ const unpackSourceMap = (state, options) => {
+@@ -1251,7 +1293,7 @@ const unpackSourceMap = (state, options) => {
      });
  
      // handle bytes ranges

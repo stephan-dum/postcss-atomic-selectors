@@ -163,7 +163,7 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  monocart-coverage-reports: 264b76a17c57def19caf501f6b50e81efc635fbabd1d04f43f718bd5cee71f77
+  monocart-coverage-reports: 071668b52efdb28d77a62e5fdf70d55bef67e5fea191d745a42593712624a792
 
 importers:
 
@@ -192,7 +192,7 @@ importers:
     dependencies:
       monocart-coverage-reports:
         specifier: 2.13.2
-        version: 2.13.2(patch_hash=264b76a17c57def19caf501f6b50e81efc635fbabd1d04f43f718bd5cee71f77)
+        version: 2.13.2(patch_hash=071668b52efdb28d77a62e5fdf70d55bef67e5fea191d745a42593712624a792)
     devDependencies:
       '@dev/eslint':
         specifier: 1.0.0
@@ -255,7 +255,7 @@ importers:
         version: 10.1.0
       monocart-coverage-reports:
         specifier: 2.13.2
-        version: 2.13.2(patch_hash=264b76a17c57def19caf501f6b50e81efc635fbabd1d04f43f718bd5cee71f77)
+        version: 2.13.2(patch_hash=071668b52efdb28d77a62e5fdf70d55bef67e5fea191d745a42593712624a792)
       playwright:
         specifier: 1.64.0
         version: 1.64.0
@@ -333,7 +333,7 @@ importers:
         version: 10.1.0
       monocart-coverage-reports:
         specifier: 2.13.2
-        version: 2.13.2(patch_hash=264b76a17c57def19caf501f6b50e81efc635fbabd1d04f43f718bd5cee71f77)
+        version: 2.13.2(patch_hash=071668b52efdb28d77a62e5fdf70d55bef67e5fea191d745a42593712624a792)
       playwright:
         specifier: 1.64.0
         version: 1.64.0
@@ -396,7 +396,7 @@ importers:
         version: 10.1.0
       monocart-coverage-reports:
         specifier: 2.13.2
-        version: 2.13.2(patch_hash=264b76a17c57def19caf501f6b50e81efc635fbabd1d04f43f718bd5cee71f77)
+        version: 2.13.2(patch_hash=071668b52efdb28d77a62e5fdf70d55bef67e5fea191d745a42593712624a792)
       playwright:
         specifier: 1.64.0
         version: 1.64.0
@@ -471,7 +471,7 @@ importers:
         version: 5.6.8(@rspack/core@2.2.9(@swc/helpers@0.5.23))(webpack@5.112.0)
       monocart-coverage-reports:
         specifier: 2.13.2
-        version: 2.13.2(patch_hash=264b76a17c57def19caf501f6b50e81efc635fbabd1d04f43f718bd5cee71f77)
+        version: 2.13.2(patch_hash=071668b52efdb28d77a62e5fdf70d55bef67e5fea191d745a42593712624a792)
       playwright:
         specifier: 1.64.0
         version: 1.64.0
@@ -7239,7 +7239,7 @@ snapshots:
       postcss: 8.5.30
       svgo: 4.1.0
 
-  monocart-coverage-reports@2.13.2(patch_hash=264b76a17c57def19caf501f6b50e81efc635fbabd1d04f43f718bd5cee71f77):
+  monocart-coverage-reports@2.13.2(patch_hash=071668b52efdb28d77a62e5fdf70d55bef67e5fea191d745a42593712624a792):
     dependencies:
       acorn: 8.19.0
       acorn-loose: 8.5.2

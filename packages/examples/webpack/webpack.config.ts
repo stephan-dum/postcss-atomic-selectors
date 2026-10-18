@@ -18,7 +18,7 @@ const webpackConfig: DefineConfigInput = (_, { mode }) => {
       main: './src/index.tsx',
     },
     output: {
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(import.meta.dirname, 'dist'),
       clean: true,
     },
     devtool: 'source-map',
