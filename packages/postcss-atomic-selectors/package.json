@@ -11,6 +11,11 @@
     "v8",
     "coverage"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephan-dum/postcss-atomic-selectors.git",
+    "directory": "packages/postcss-atomic-selectors"
+  },
   "files": [
     "dist"
   ],

@@ -51,10 +51,10 @@ postcss(
 
 For more detailed examples see:
 
-- [rollup Example](../examples/rollup/readme.md)
-- [pspack Example](../examples/rspack/readme.md)
-- [Vite Example](../examples/vite/readme.md)
-- [webpack Example](../examples/webpack/readme.md)
+- [rollup Example](https://github.com/stephan-dum/postcss-atomic-selectors/tree/main/packages/examples/rollup/readme.md)
+- [pspack Example](https://github.com/stephan-dum/postcss-atomic-selectors/tree/main/packages/examples/rspack/readme.md)
+- [Vite Example](https://github.com/stephan-dum/postcss-atomic-selectors/tree/main/packages/examples/vite/readme.md)
+- [webpack Example](https://github.com/stephan-dum/postcss-atomic-selectors/tree/main/packages/examples/webpack/readme.md)
 
 Due to their internal optimization architecture, which reverts the selector explosion with no way to disable it, the following bundlers are not supported:
 
